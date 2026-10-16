@@ -188,7 +188,7 @@ This project demonstrates classification, not a guarantee that every message is 
 
 **Yash Bhure** — NLP, deep learning and cybersecurity project.
 
-Hugging Face: [huggingface.co/Yashbhure](https://huggingface.co/Yashbhure)
+Hugging Face: [huggingface.co/Yashbhure](https://huggingface.co/yashbhure0009/sms-spam-bert-bilstm/)
 
 ---
 
