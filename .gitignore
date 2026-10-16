@@ -1,0 +1,21 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+
+# Local secrets and environment files
+.env
+.env.*
+
+# Large trained checkpoint; publish this separately on Hugging Face
+reports/bert_bilstm_weights.pt
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

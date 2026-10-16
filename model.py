@@ -17,6 +17,13 @@ class BertBiLSTMClassifier(nn.Module):
         )
         self.dropout = nn.Dropout(dropout)
         self.fc = nn.Linear(hidden_size * 2, 1)
+        self._printed_forward_shapes = False
+        print(
+            "[Model] Initialized BertBiLSTMClassifier: "
+            f"bert_hidden_size={bert_model.config.hidden_size}, "
+            f"lstm_hidden_size={hidden_size}, layers={num_layers}, "
+            f"dropout={dropout}"
+        )
         
     def forward(self, input_ids, attention_mask):
         # Pass input through BERT
@@ -37,5 +44,14 @@ class BertBiLSTMClassifier(nn.Module):
         
         # Pass the BiLSTM output through the fully connected layer
         logits = self.fc(lstm_output.squeeze(1))
+
+        if not self._printed_forward_shapes:
+            print(
+                "[Model] First forward pass shapes: "
+                f"input_ids={tuple(input_ids.shape)}, "
+                f"bert_cls={tuple(cls_hidden_state.shape)}, "
+                f"logits={tuple(logits.shape)}"
+            )
+            self._printed_forward_shapes = True
         
         return logits

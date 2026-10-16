@@ -1,60 +1,195 @@
-# SMS Spam Detection with BERT and BiLSTM
+# 🛡️ SMS SpamShield
 
-This repository contains the code for SMS spam detection using a combination of BERT (Bidirectional Encoder Representations from Transformers) and BiLSTM (Bidirectional Long Short-Term Memory) models. The model is trained and evaluated on the SMS Spam Collection Dataset.
+### Intelligent SMS Threat Detection with BERT, BiLSTM and Explainable ML
 
-## Overview
+> **A hackathon-ready NLP security project by Yash Bhure**
 
-SMS spam detection is an important task in the field of natural language processing and information security. This project aims to effectively detect spam messages using a combination of pre-trained BERT model and BiLSTM network. The BERT model is fine-tuned on the SMS dataset to capture semantic and contextual information, while the BiLSTM network is used to model the sequential dependencies in the text.
+SMS SpamShield detects whether a message is legitimate (**HAM**) or malicious (**SPAM**) using contextual language understanding, deep sequence modeling, and explainable machine learning.
 
-## Requirements
+It is designed for a live demo: train it, inspect the complete scorecard, open the generated visual dashboard, and classify a suspicious message interactively.
 
-+ Python 3.6+
-+ PyTorch 1.8+
-+ Transformers 4.5+
-+ scikit-learn 0.24+
-+ pandas 1.2+
+![Evaluation dashboard](reports/evaluation_dashboard.png)
 
-## Dataset
+## ✨ Why this project?
 
-The SMS Spam Collection Dataset is used for training and evaluation. The dataset contains a total of 5,574 SMS messages, out of which 747 (13.4%) are spam messages and 4,827 (86.6%) are legitimate messages (ham). The dataset is preprocessed and split into train and test sets using a stratified random sampling approach.
+Spam messages are not just annoying—they can carry phishing links, financial fraud, impersonation attempts, and social-engineering attacks. SpamShield converts raw SMS text into a security decision with confidence scoring and measurable evidence.
 
-The dataset is located in the `data` directory and is loaded using the `SMSDataset` class defined in `data.py`.
+### Highlights
 
-## Model Architecture
+- 🧠 **BERT + BiLSTM classifier** for contextual text understanding.
+- ⚡ **Fast CPU model** using TF-IDF + balanced Logistic Regression.
+- 🌳 **Explainable Decision Tree baseline** for transparent decisions.
+- 📊 Complete metrics: accuracy, precision, recall, F1, ROC-AUC, average precision and specificity.
+- 🔎 Confusion matrix with false-positive and false-negative analysis.
+- 📈 Training-loss, metric, ROC and precision-recall visualizations.
+- 💬 Single-message and interactive prediction modes.
+- 🚀 Ready for deployment as a Hugging Face Gradio Space.
 
-![avag](./imgs/1.png)
+## 🧩 System architecture
 
-The model architecture consists of two main components:
+![BERT + BiLSTM architecture](imgs/1.png)
 
-1. **BERT**: A pre-trained BERT model is used to extract contextual embeddings from the input text. The 'bert-base-uncased' model is used and fine-tuned during training.
-2. **BiLSTM**: A bidirectional LSTM network is used to capture the sequential dependencies in the text. The hidden states from both directions are concatenated and passed through a fully connected layer for classification.
-
-The model architecture is implemented in the `BertBiLSTMClassifier` class defined in `model.py`.
-
-## Usage
-
-To train and evaluate the model, run the following command:
-
-```bash
-python main.py
+```text
+SMS message
+    │
+    ▼
+Tokenizer / TF-IDF vectorizer
+    │
+    ├── BERT contextual embeddings ──► BiLSTM ──► Classifier ──► HAM / SPAM
+    │
+    ├── TF-IDF ──► Logistic Regression ──► Fast CPU prediction
+    │
+    └── TF-IDF ──► Decision Tree ──► Explainable baseline
 ```
 
-The script will load the dataset, initialize the model, and start the training process. After each epoch, the model will be evaluated on the test set, and the loss and F1-score will be printed.
+## 🏆 Results
 
-## Results
+The test set contains **1,115 messages**, with stratified sampling preserving the original class distribution.
 
-The model achieves the following results on the test set:
+| Model | Accuracy | Precision | Recall | F1 | ROC-AUC | Specificity |
+|---|---:|---:|---:|---:|---:|---:|
+| **BERT + BiLSTM** | **99.19%** | **98.61%** | **95.30%** | **96.93%** | **99.31%** | **99.79%** |
+| Fast CPU Logistic Regression | 98.83% | 97.89% | 93.29% | 95.53% | 99.02% | 99.69% |
+| Decision Tree | 95.52% | 82.78% | 83.89% | 83.33% | 88.06% | 97.31% |
 
-| Model    | Accuracy (%) | Precision (%) | Recall (%) | F1-score (%) |
-| :------- | :----------- | :------------ | :--------- | :----------- |
-| NB       | 98.1+-0.2    | 97.3+-0.5     | 91.5+-1.2  | 94.3+-0.7    |
-| SVM      | 98.5+-0.1    | 98.1+-0.3     | 92.7+-0.9  | 95.3+-0.5    |
-| LR       | 98.6+-0.1    | 98.2+-0.2     | 93.1+-0.7  | 95.6+-0.4    |
-| CNN      | 98.8+-0.1    | 98.5+-0.2     | 93.9+-0.6  | 96.1+-0.3    |
-| BiLSTM   | 99.0+-0.1    | 98.7+-0.2     | 94.5+-0.5  | 96.6+-0.3    |
-| BERT     | 99.2+-0.1    | 99.0+-0.1     | 95.2+-0.4  | 97.1+-0.2    |
-| Proposed | 99.4+-0.1    | 99.2+-0.1     | 96.1+-0.3  | 97.6+-0.2    |
+### BERT + BiLSTM error analysis
 
-## Conclusion
+```text
+True negatives: 964
+False positives: 2
+False negatives: 7
+True positives: 142
+```
 
-In conclusion, our work highlights the potential of leveraging pre-trained language models and deep learning techniques for SMS spam detection and provides a strong baseline for future research in this area.
+The model achieved only **2 false positives** and **7 missed spam messages** on the test split.
+
+## 📊 Visual reports
+
+| Report | Preview |
+|---|---|
+| Evaluation dashboard | [Open dashboard](reports/evaluation_dashboard.png) |
+| Decision tree | [Open tree](reports/decision_tree.png) |
+| Fast CPU dashboard | [Open CPU dashboard](reports/fast_cpu_dashboard.png) |
+| Model comparison | [Open CSV](reports/model_comparison.csv) |
+
+The `reports/` directory also contains JSON metrics, per-class classification reports, and model artifacts.
+
+> The 422 MB `bert_bilstm_weights.pt` checkpoint is intentionally excluded from GitHub because GitHub limits individual files to 100 MB. Upload that checkpoint to the Hugging Face Space or Model Hub separately.
+
+## 🚀 Run locally
+
+### 1. Install dependencies
+
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### 2. Fast CPU training
+
+Recommended for laptops and hackathon demonstrations:
+
+```powershell
+python fast_cpu.py
+```
+
+This produces results quickly without BERT backpropagation.
+
+### 3. Full BERT + BiLSTM training
+
+```powershell
+python main.py --epochs 5 --verbose 2
+```
+
+Verbosity options:
+
+```text
+--verbose 0   Quiet training
+--verbose 1   Full metrics per epoch
+--verbose 2   One compact line per epoch
+```
+
+For CPU-only machines, full BERT fine-tuning can take hours. A CUDA-enabled PyTorch installation is strongly recommended for this mode.
+
+### 4. Classify a message
+
+```powershell
+python main.py --message "Congratulations! You won a free prize. Call now!"
+```
+
+Or launch interactive mode:
+
+```powershell
+python main.py --interactive
+```
+
+## 🧪 Example decisions
+
+| Input | Expected decision |
+|---|---|
+| `Congratulations! You have won a free prize. Call now!` | 🚨 SPAM |
+| `Hey, are we still meeting for lunch today?` | ✅ HAM |
+
+## 🤗 Hugging Face deployment
+
+The repository includes `app.py`, a Gradio inference interface.
+
+1. Train the model first:
+
+   ```powershell
+   python main.py --epochs 5 --verbose 2
+   ```
+
+2. Confirm this file exists:
+
+   ```text
+   reports/bert_bilstm_weights.pt
+   ```
+
+3. Create a new **Gradio Space** on Hugging Face.
+4. Upload:
+
+   ```text
+   app.py
+   model.py
+   requirements.txt
+   reports/bert_bilstm_weights.pt
+   ```
+
+5. Or upload from the terminal:
+
+   ```powershell
+   hf auth login
+   hf upload YOUR_USERNAME/sms-spamshield . --repo-type=space
+   ```
+
+The Space will install `requirements.txt` and launch `app.py` automatically. Keep tokens and private data out of the repository.
+
+## 📁 Project structure
+
+```text
+SMS-spam-detection/
+├── app.py                         # Hugging Face Gradio app
+├── main.py                        # BERT + BiLSTM training pipeline
+├── fast_cpu.py                    # Fast TF-IDF CPU pipeline
+├── data.py                        # Dataset and tokenizer interface
+├── model.py                       # BERT + BiLSTM architecture
+├── spam.csv                       # SMS dataset
+├── requirements.txt               # Python dependencies
+└── reports/                       # Metrics, graphs and model artifacts
+```
+
+## 🔐 Security perspective
+
+This project demonstrates classification, not a guarantee that every message is safe. Production systems should combine the model with URL reputation, sender history, rate limiting, user reporting, adversarial testing, and human review for high-impact decisions.
+
+## 👤 Author
+
+**Yash Bhure** — NLP, deep learning and cybersecurity project.
+
+Hugging Face: [huggingface.co/Yashbhure](https://huggingface.co/Yashbhure)
+
+---
+
+### Built to detect threats before they become incidents. 🛡️
