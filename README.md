@@ -29,13 +29,13 @@ Spam messages are not just annoying—they can carry phishing links, financial f
 
 ```mermaid
 flowchart TD
-    A["📄 spam.csv<br/>SMS Spam Collection"] --> B["🧹 data.py<br/>Load and clean data"]
-    B --> C["✂️ Stratified train/test split<br/>80% train - 20% test, 1115 test messages"]
+    A["spam.csv<br/>SMS Spam Collection"] --> B["data.py<br/>Load and clean data"]
+    B --> C["Stratified train/test split<br/>80% train - 20% test, 1115 test messages"]
 
-    C --> D["🔤 BERT tokenizer"]
-    C --> E["📊 TF-IDF vectorizer"]
+    C --> D["BERT tokenizer"]
+    C --> E["TF-IDF vectorizer"]
 
-    subgraph DL["🧠 Deep learning pipeline - main.py"]
+    subgraph DL["Deep learning pipeline - main.py"]
         D --> F["BERT<br/>contextual embeddings"]
         F --> G["CLS vector"]
         G --> H["BiLSTM"]
@@ -43,27 +43,27 @@ flowchart TD
         I --> J["Sigmoid<br/>spam probability"]
     end
 
-    subgraph ML["⚡ Classical ML pipeline - fast_cpu.py"]
+    subgraph ML["Classical ML pipeline - fast_cpu.py"]
         E --> K["Logistic Regression<br/>balanced, fast CPU model"]
         E --> L["Decision Tree<br/>explainable baseline"]
     end
 
-    J --> M["📈 Evaluation on test set"]
+    J --> M["Evaluation on test set"]
     K --> M
     L --> M
 
     M --> N["Accuracy, Precision, Recall, F1,<br/>ROC-AUC, Specificity"]
     M --> O["Confusion matrix<br/>ROC and PR curves"]
-    N --> P["📁 reports/<br/>dashboards, JSON, CSV, weights"]
+    N --> P["reports/<br/>dashboards, JSON, CSV, weights"]
     O --> P
 
-    P --> Q["💬 Prediction<br/>main.py --message / --interactive"]
-    P --> R["🚀 app.py<br/>Gradio app on Hugging Face Space"]
+    P --> Q["Prediction<br/>main.py --message / --interactive"]
+    P --> R["app.py<br/>Gradio app on Hugging Face Space"]
 
     Q --> S{"Decision"}
     R --> S
-    S -->|"probability above threshold"| T["🚨 SPAM"]
-    S -->|"otherwise"| U["✅ HAM"]
+    S -->|"probability above threshold"| T["SPAM"]
+    S -->|"otherwise"| U["HAM"]
 ```
 
 ## 🧩 System architecture
